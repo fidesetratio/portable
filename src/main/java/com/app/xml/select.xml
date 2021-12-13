@@ -1,0 +1,83 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.app.mapper.DashboardDao">
+
+
+<resultMap id="userResult" type="com.app.model.User">
+	<id property="userId" column="userId"/>
+	<result property="username" column="username"/>
+	<result property="password" column="password"/>
+	<result property="email" column="email"/>
+	<result property="active" column="active"/>
+	<result property="photo" column="photo"/>
+	
+	<collection property="groups" ofType="com.app.model.Group">
+		<id property="groupId" column="groupId"/>
+		<result property="group_name" column="group_name"/>
+		<result property="description" column="description"/>
+	</collection>
+</resultMap>
+
+
+
+	<select id="getListDatasources" resultType="com.app.model.DatabaseDatasource">
+       	select * from lst_datasources
+    </select>
+    
+    
+    <select id="getQueryById" parameterType="Integer" resultType="com.app.model.DynamicQuery">
+		select a.queryId,a.queryString, b.datasource_name, a.flag_active, a.description ,a.created_date from lst_queries a
+		inner join lst_datasources b 
+		on a.datasource_id  = b.datasource_id 
+		where a.queryId = #{queryId, jdbcType=INTEGER} and a.flag_active = 1 
+	</select>
+	
+	<select id="selectTotalOfUsername" parameterType="String" resultType="Integer">
+		select count(*) as total from  lst_users lu where username = #{username, jdbcType=VARCHAR}
+	</select>
+	<select id="selectTotalOfEmail" parameterType="String" resultType="Integer">
+		select count(*) as total from  lst_users lu where email = #{email, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectUsernameByPassword" parameterType="HashMap" resultMap="userResult">
+		select a.user_id as userId, a.username, a.pass as password, a.email,
+		a.active,a.photo,c.group_id as groupId,c.group_name, c.description  from lst_users a
+		left outer join lst_user_groups b on (a.user_id=b.user_id)
+		left outer join lst_groups c on (c.group_id = b.group_id)
+		where a.username=#{username, jdbcType=VARCHAR}  and a.pass = #{password, jdbcType=VARCHAR} and a.active =1 and c.active = 1
+	</select>
+
+
+	<select id="selectUsernameByUsername" parameterType="String" resultType="com.app.model.User">
+		select a.user_id as userId, a.username, a.pass as password, a.email
+		  from lst_users a
+		where a.username=#{username, jdbcType=VARCHAR} and a.active =1
+	</select>
+	
+	
+	
+	<select id="selectAllUserNameAndGroup" resultType="com.app.model.UserView">
+		select a.user_id as userId,a.username,a.email,a.active, group_concat(c.group_name) as groupMembers,a.photo  from lst_users a
+		left join lst_user_groups b on (a.user_id=b.user_id)
+		left join lst_groups c on (c.group_id = b.group_id)
+		group by a.user_id 
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectRolesFromGroups" resultType="com.app.model.Role">
+		select c.role_id as roleId,c.role_name,c.description from lst_group_roles a
+		left outer join lst_groups b on (a.group_id = b.group_id)
+		left outer join lst_roles c on (a.role_id = c.role_id)
+		where a.group_id in 
+		<foreach collection="list" item="groupid" index="index" open="(" separator="," close=")">
+		               #{groupid}
+		</foreach>
+		 and b.active = 1 and c.active = 1
+	</select>
+	
+
+</mapper>

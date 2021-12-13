@@ -1,0 +1,131 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta3
+* @link https://tabler.io
+* Copyright 2018-2021 The Tabler Authors
+* Copyright 2018-2021 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+ 
+   <head th:include="fragments/layoutdashboard :: main-header">       
+  </head>
+ 
+  <body class="antialiased">
+  
+    <div class="wrapper">
+  
+      <div class="sticky-top">
+       <div th:insert="fragments/layoutdashboard :: header"></div>
+       <div th:insert="fragments/layoutdashboard :: menu"></div>
+      </div>
+      
+    
+      <div class="page-wrapper">
+       
+       <div class="container-xl">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="page-title">
+                  Extra - Easy UI
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page-body">
+          <div class="container-xl">
+            <!-- Content here -->
+       		    <div class="col-xl-12">
+       		    <table class="easyui-datagrid" id="dg" title="Search Easy Ui Application" 
+       		data-options="rownumbers:true,url:'/extra/app/list',toolbar:'#tb',footer:'#ft',pagination:true,fitColumns:true,singleSelect:true" style="height:250px;">
+		<thead>
+			<tr>
+				<th data-options="field:'noId',width:100">No</th>
+				
+				<th data-options="field:'applicationName',width:100">Application Name</th>
+				<th data-options="field:'description',width:100">Description</th>
+				<th data-options="field:'action',width:100" formatter="formatDetail">Action</th>
+				
+			</tr>
+		</thead>
+	</table>
+	<div id="tb" style="padding:2px 5px;">
+		<select class="easyui-combobox" id="selectType" panelHeight="auto" style="width:100px">
+			<option value="selectAll">Select All</option>
+			<option value="table">Table</option>
+
+		</select>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch();return false;">Search</a>
+	</div>
+	<div id="ft" style="padding:2px 5px;">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
+	</div>
+	 <script type="text/javascript">
+	 function formatDetail(value,row){
+			var href = 'innerlist.php?list='+row.id;
+			var dhref = 'dellist.php?list='+row.id;
+			return '<button type="button" class="btn" onclick="actionEdit(this)">Edit</button>';
+		}
+	 
+	  	function actionEdit(e){
+	        window.open("/extra-easyui?test=2");
+	  		return false;
+	  	}
+	  	
+	  	
+	 		function doSearch(){
+	 				var token = $('#_csrf').attr('content');
+	 				var header = $('#_csrf_header').attr('content');
+			 			$.ajaxSetup({
+			 			    beforeSend: function(xhr){
+			 			        if(token.length > 0 && header.length > 0){
+			 			            xhr.setRequestHeader(header, token);
+			 			        };
+			 			    }
+			 			});
+			 			
+	 			var dg = 	 $('#dg').datagrid('load',{
+	 			        selecttype: $("#selectType").val()
+	 			    });
+	 			
+	 			
+	 				 
+	 			
+	 		}
+	 		
+	 		
+	 		
+	 		hooks.push(
+	 				function() { doSearch();}
+	 		);
+	 		
+	 		
+	 
+	 </script>
+	 
+	   		    </div>
+
+          </div>
+        </div>
+        
+         
+        <div th:insert="fragments/layoutdashboard :: footer"></div>
+        
+      </div>
+    </div>
+     <div th:insert="fragments/modal :: modal02"></div>
+     
+
+
+   
+   
+  </body>
+</html>

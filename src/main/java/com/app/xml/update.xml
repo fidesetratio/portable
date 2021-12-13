@@ -1,0 +1,13 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.app.mapper.DashboardDao">
+	<update id="updateEmailByUserId" parameterType="com.app.model.User">
+			update lst_users set email = #{email,jdbcType=VARCHAR} where user_id = #{userId, jdbcType=INTEGER}
+	</update>
+	<update id="updatePhotoByUserId" parameterType="com.app.model.User">
+			update lst_users set photo = #{photo,jdbcType=VARCHAR} where user_id = #{userId, jdbcType=INTEGER}
+	</update>
+	
+	
+	
+</mapper>
+

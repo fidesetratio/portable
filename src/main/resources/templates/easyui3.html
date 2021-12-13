@@ -1,0 +1,112 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta3
+* @link https://tabler.io
+* Copyright 2018-2021 The Tabler Authors
+* Copyright 2018-2021 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+ 
+   <head th:include="fragments/layoutdashboard :: main-header">       
+  </head>
+ 
+  <body class="antialiased">
+  
+    <div class="wrapper">
+  
+      <div class="sticky-top">
+       <div th:insert="fragments/layoutdashboard :: header"></div>
+       <div th:insert="fragments/layoutdashboard :: menu"></div>
+      </div>
+      
+    
+      <div class="page-wrapper">
+       
+       <div class="container-xl">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="page-title">
+                  Extra - Easy UI
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page-body">
+          <div class="container-xl">
+            <!-- Content here -->
+       		    <div class="col-xl-12">
+       		    <table class="easyui-datagrid" id="dg" title="Search.." 
+			data-options="rownumbers:true,url:'/extra/user/list',toolbar:'#tb',footer:'#ft',pagination:true" style="height:250px;">
+		<thead>
+			<tr>
+				<th data-options="field:'userId',width:80">User Id</th>
+				<th data-options="field:'username',width:100">Username</th>
+				<th data-options="field:'email',width:80,align:'right'">Email</th>
+				<th data-options="field:'active',width:80,align:'right'">Active</th>
+				<th data-options="field:'photo',width:240">Photo</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="tb" style="padding:2px 5px;">
+		Date From: <input class="easyui-datebox" style="width:110px">
+		To: <input class="easyui-datebox" style="width:110px">
+		Language: 
+		<select class="easyui-combobox" panelHeight="auto" style="width:100px">
+			<option value="java">Java</option>
+			<option value="c">C</option>
+			<option value="basic">Basic</option>
+			<option value="perl">Perl</option>
+			<option value="python">Python</option>
+		</select>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch();return false;">Search</a>
+	</div>
+	<div id="ft" style="padding:2px 5px;">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
+	</div>
+	 <script type="text/javascript">
+	 		function doSearch(){
+	 			var token = $('#_csrf').attr('content');
+	 			var header = $('#_csrf_header').attr('content');
+	 			$.ajaxSetup({
+	 			    beforeSend: function(xhr){
+	 			        if(token.length > 0 && header.length > 0){
+	 			            xhr.setRequestHeader(header, token);
+	 			        };
+	 			    }
+	 			});
+	 			
+	 				 $('#dg').datagrid('load',{
+	 			        username: 'username'
+	 			    });
+	 		}
+	 
+	 </script>
+	 
+	
+	
+       		    </div>
+          </div>
+        </div>
+        
+         
+        <div th:insert="fragments/layoutdashboard :: footer"></div>
+        
+      </div>
+    </div>
+     <div th:insert="fragments/modal :: modal02"></div>
+     
+
+
+   
+   
+  </body>
+</html>
